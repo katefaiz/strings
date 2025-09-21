@@ -8,7 +8,7 @@ enum Errors {
     OPENFILE_ERROR  = 1,
     MEMORY_ERROR    = 2
 };
-
+//ннн
 void failed_funk(Errors failed);
 Errors counting_strings(char ** buffer, int * line_cnt);
 Errors array_filling(char ** buffer, int line_cnt, char ***text);
