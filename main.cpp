@@ -7,19 +7,23 @@ int main() {
     
     Errors failed = counting_strings(&buffer, &line_cnt);
     if (failed == NO_ERROR)
-        failed = array_filling(&buffer, line_cnt, &text); 
-
+        failed = array_filling(&buffer, line_cnt, &text);
+    else {
+        exit(EXIT_FAILURE);
+    }
+    if (failed != NO_ERROR)
+        exit(EXIT_FAILURE);
     failed_funk(failed); 
 
-    //qsort(text, line_cnt, sizeof(char*), compare); 
-    buble_sort(text, line_cnt, sizeof(char*), compare);
+    buble_sort(text, line_cnt, compare);
 
-    if (failed == 0) {
+    if (failed == NO_ERROR) {
         for (int i = 0; i < line_cnt; i++) {
             printf("%s\n", text[i]);
            
         }
         free(text);
+        free(buffer); 
         
     }
     return 0;
