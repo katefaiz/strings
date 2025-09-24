@@ -8,15 +8,14 @@ CXXFLAGS := -std=c++11 -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wund
 CPPOBJ := ./main.o ./onegin.o 
 
 
-./main.o: ./main.cpp
-	g++ $(CXXFLAGS) -c  ./main.cpp -o ./main.o
-./onegin.o: ./onegin.cpp
-	g++ $(CXXFLAGS) -c  ./onegin.cpp -o ./onegin.o
-
-
-	
 onegin.exe: $(CPPOBJ)
 	g++ $(CXXFLAGS) $(CPPOBJ) -o ./onegin.exe
+
+./main.o: ./main.cpp
+	g++ $(CXXFLAGS) -c  ./main.cpp -o ./main.o
+	
+./onegin.o: ./onegin.cpp
+	g++ $(CXXFLAGS) -c  ./onegin.cpp -o ./onegin.o
 
 onegin: $(CPPOBJ)
 	g++ $(CXXFLAGS) $(CPPOBJ) -o ./onegin

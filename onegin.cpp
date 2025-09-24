@@ -1,6 +1,11 @@
-#include "onegin.h"
+#include <stdio.h> 
+#include <string.h>
+#include <math.h>
+#include <assert.h>
 #include <sys/stat.h>
-Errors counting_strings(char ** buffer, int * line_cnt) {
+
+#include "onegin.h"
+Errors counting_strings(char ** buffer, size_t * line_cnt) { 
     assert(buffer != 0);
     assert(line_cnt != 0);
 
@@ -8,13 +13,10 @@ Errors counting_strings(char ** buffer, int * line_cnt) {
     if (filestream == NULL) 
         return OPENFILE_ERROR;
     
-    /*fseek(filestream, 0, SEEK_END);  // TODO: ок, так умеешь, теперь сделай с помощью функции stat (так быстрее)
-    long fsize = ftell(filestream); 
-    fseek(filestream, 0, SEEK_SET); */
     struct stat st;
     if (stat("data_for_str.txt", &st) == -1) {
         fclose(filestream);
-        return OPENFILE_ERROR;
+        return FILE_SIZE_ERROR; 
     }
     long fsize = st.st_size;
    
@@ -28,7 +30,7 @@ Errors counting_strings(char ** buffer, int * line_cnt) {
     (*buffer)[fsize] = '\0';
 
     *line_cnt = 0; 
-    char * ptr = * buffer;
+    char *ptr = *buffer; 
     while (*ptr != '\0') {
         if (ptr == *buffer || *(ptr - 1) == '\n') { //если это начало файла или начало новой строки
             if (*ptr != '\n')
@@ -40,7 +42,7 @@ Errors counting_strings(char ** buffer, int * line_cnt) {
     return NO_ERROR;
 }
 
-Errors array_filling(char ** buffer, int line_cnt, char ***text) { 
+Errors array_filling(char ** buffer, size_t line_cnt, char ***text) { 
     assert(line_cnt != 0);
     assert(text != 0);
 
@@ -50,12 +52,8 @@ Errors array_filling(char ** buffer, int line_cnt, char ***text) {
         return MEMORY_ERROR;
 
     char *ptr = *buffer; 
-    int i = 0;
+    size_t i = 0;
     while ( *ptr != '\0' && i < line_cnt) { 
-        /*if (*ptr == '\n') {
-            ptr++;
-            continue;
-        }*/
         (*text)[i] = ptr;
         i++;
         while(*ptr != '\0' && *ptr != '\n')
@@ -79,6 +77,9 @@ void failed_funk(Errors failed) {
             break;
         case MEMORY_ERROR:
             printf("Memory allocation error\n");
+            break;
+        case FILE_SIZE_ERROR:
+            printf("Error in measuring file size\n");
             break;
         default: 
             printf("Error\n");
@@ -108,13 +109,13 @@ int compare(const void * x1, const void * x2) {
 
 void buble_sort(void * ptr, size_t count_lines, int ( * compare) (const void * x1, const void * x2)) {
     assert(ptr != 0);
-   
 
-    char ** text = (char **)ptr; 
+    char **text = (char **)ptr; 
 
     for (size_t i = 0; i < count_lines - 1; i++) {
         for (size_t j = 0; j < count_lines - 1 - i; j++) {
-            if (compare((const void *)&text[j], (const void *)&text[j + 1]) > 0)
+            //if (compare((const void *)&text[j], (const void *)&text[j + 1]) > 0)
+            if (compare(text + j, text + j + 1) > 0)
                 swap(&text[j], &text[j + 1]);
         }
     }
