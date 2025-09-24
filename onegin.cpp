@@ -1,5 +1,5 @@
 #include "onegin.h"
-
+#include <sys/stat.h>
 Errors counting_strings(char ** buffer, int * line_cnt) {
     assert(buffer != 0);
     assert(line_cnt != 0);
@@ -8,10 +8,16 @@ Errors counting_strings(char ** buffer, int * line_cnt) {
     if (filestream == NULL) 
         return OPENFILE_ERROR;
     
-    fseek(filestream, 0, SEEK_END);  // TODO: ок, так умеешь, теперь сделай с помощью функции stat (так быстрее)
+    /*fseek(filestream, 0, SEEK_END);  // TODO: ок, так умеешь, теперь сделай с помощью функции stat (так быстрее)
     long fsize = ftell(filestream); 
-    fseek(filestream, 0, SEEK_SET); 
-    
+    fseek(filestream, 0, SEEK_SET); */
+    struct stat st;
+    if (stat("data_for_str.txt", &st) == -1) {
+        fclose(filestream);
+        return OPENFILE_ERROR;
+    }
+    long fsize = st.st_size;
+   
 
     *buffer = (char*)calloc(fsize + 1, sizeof(char));
     if (*buffer == 0)
